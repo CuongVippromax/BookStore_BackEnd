@@ -1,0 +1,16 @@
+#spring.application.name=BookStore
+spring:
+  application:
+    name: BookStore
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookstore
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+jwt:
+  secret-key: 38fvze0661o1shjkkx8serxxhrkfgikhw2zdlsidsd48tm5amvqb0dbo6swivjrl
+
+
