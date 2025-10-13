@@ -1,6 +1,10 @@
 package com.cuong.bookstore.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +23,18 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends AbstractEntity<Long> implements UserDetails, Serializable {
+    @NotBlank(message = "name must be not null ")
     private String username;
+    @NotBlank
+    @Size(min = 5)
     private String password;
+    @Email
     private String email;
+    @Size(min = 10, max = 10)
+    @Column(unique = true)
     private String phone;
+    @NotBlank
+    @Size(min = 3)
     private String address;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.ALL)

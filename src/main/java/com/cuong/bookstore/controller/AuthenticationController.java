@@ -2,34 +2,44 @@ package com.cuong.bookstore.controller;
 
 import com.cuong.bookstore.dto.request.LoginRequest;
 import com.cuong.bookstore.dto.response.ApiResponse;
-import com.cuong.bookstore.model.User;
-import lombok.AllArgsConstructor;
+import com.cuong.bookstore.dto.response.LoginResponse;
+import com.cuong.bookstore.service.AuthenticationService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
+import java.text.ParseException;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
+@Slf4j
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ApiResponse<LoginRequest> login (LoginRequest loginRequest) throws AuthenticationException {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
-        Authentication authenticate = authenticationManager.authenticate(token);
-        User user = (User) authenticate.getPrincipal();
+    public ApiResponse<LoginResponse> login (@RequestBody @Valid LoginRequest loginRequest) throws AuthenticationException {
+        var result = authenticationService.login(loginRequest);
 
-        return ApiResponse.<LoginRequest>builder()
+        return ApiResponse.<LoginResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Login successful!")
-                .data()
+                .data(result)
+                .build();
+    }
+    @PostMapping("/logout")
+    public ApiResponse<Void> logout(@RequestHeader("Authorization") String authHeader) throws ParseException {
+        String token = authHeader.replace("Bearer ", "");
+        authenticationService.logout(token);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Logout successful!")
                 .build();
     }
 }

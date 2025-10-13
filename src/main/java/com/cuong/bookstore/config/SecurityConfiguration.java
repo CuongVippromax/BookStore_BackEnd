@@ -28,16 +28,24 @@ public class SecurityConfiguration {
     private final JwtDecoderCustom jwtDecoder;
     private final String [] PUBLIC_ENDPOINTS = {
             "/api/v1/user",
-            "/a[i/v1/login"
+            "/api/v1/auth/login"
     };
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public AuthenticationManager authenticationManager()  {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailService);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return new ProviderManager(daoAuthenticationProvider);
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailService);
+        provider.setPasswordEncoder(passwordEncoder());
+
+        return provider;
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

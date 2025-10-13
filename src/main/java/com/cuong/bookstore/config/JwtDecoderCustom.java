@@ -1,10 +1,6 @@
 package com.cuong.bookstore.config;
 
 import com.cuong.bookstore.service.JwtService;
-import com.nimbusds.jwt.JWT;
-import com.nimbusds.jwt.SignedJWT;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -15,7 +11,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
-import java.text.ParseException;
 import java.util.Objects;
 
 

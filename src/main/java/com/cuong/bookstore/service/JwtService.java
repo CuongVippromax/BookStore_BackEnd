@@ -1,27 +1,28 @@
 package com.cuong.bookstore.service;
 
 import com.cuong.bookstore.common.TokenType;
+import com.cuong.bookstore.dto.JwtInfo;
 import com.cuong.bookstore.model.User;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import io.lettuce.core.json.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class JwtService {
     @Value("${jwt.secret-key}")
     private String secretKey;
+    private final RedisService redisService;
 
     public String generateToken(User user, TokenType tokenType){
         //header
@@ -35,6 +36,7 @@ public class JwtService {
                 .subject(user.getEmail())
                 .expirationTime(expirationTime)
                 .issueTime(issueTime)
+                .jwtID(UUID.randomUUID().toString())
                 .build();
         Payload payload = new Payload(claimsSet.toJSONObject());
         //signature
@@ -46,15 +48,25 @@ public class JwtService {
         }
         return  jwsObject.serialize();
     }
-    public boolean verifyToken(String token){
-        try {
-            SignedJWT signedJWT = SignedJWT.parse(token);
-            if (signedJWT.getJWTClaimsSet().getExpirationTime().before(new Date())) {
-                return false;
-            }
-            return true;
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+    public boolean verifyToken(String token) throws ParseException, JOSEException {
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        if(expirationTime.before(new Date())){
+            return false;
         }
+        return signedJWT.verify(new MACVerifier(secretKey));
+    }
+    public JwtInfo parseToken(String token) throws ParseException {
+        SignedJWT signedJWT = SignedJWT.parse(token);
+        String jwtId = signedJWT.getJWTClaimsSet().getJWTID();
+        Date issueTime = signedJWT.getJWTClaimsSet().getIssueTime();
+        Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        return JwtInfo.builder()
+                .jwtID(jwtId)
+                .issueTime(issueTime)
+                .expiredTime(expirationTime)
+                .build();
     }
 }
