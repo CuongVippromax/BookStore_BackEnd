@@ -5,6 +5,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  kafka:
+    bootstrap-servers: localhost:29092
   datasource:
     url: jdbc:mysql://localhost:3306/bookstore
     username: root
@@ -18,3 +20,6 @@ jwt:
   secret-key: 38fvze0661o1shjkkx8serxxhrkfgikhw2zdlsidsd48tm5amvqb0dbo6swivjrl
 
 
+sendgrid:
+  api-key: ${SENDGRID_API_KEY:}
+  from-email: cuongdayne1811@gmail.com

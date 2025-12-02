@@ -1,10 +1,26 @@
+# mỗi service là 1 container
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT-PORT: 2181
+      ZOOKEEPER-TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
   mysql:
     image: mysql:8.0
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: bookstore
+      MYSQL_DATABASE:  bookstore
     ports:
       - "3307:3306"
     volumes:
@@ -14,7 +30,6 @@ services:
 
 volumes:
   mysql_data:
-
 networks:
   my_network:
     driver: bridge

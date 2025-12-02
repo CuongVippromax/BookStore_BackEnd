@@ -14,14 +14,17 @@ public class RedisConfig {
     private int port;
     @Value("${spring.data.redis.host}")
     private String host;
+
+    // Bắt buộc config trả về kiểu LectureConnection ( trong doc )
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
 
         return new LettuceConnectionFactory(new RedisStandaloneConfiguration(host, port));
     }
+
+    // Dùng RedisTemplate để thực hiện thêm , xóa token trong redis
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory connectionFactory) {
-
         RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         return template;

@@ -50,13 +50,13 @@ public class JwtService {
     }
     public boolean verifyToken(String token) throws ParseException, JOSEException {
         SignedJWT signedJWT = SignedJWT.parse(token);
-
         Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
         if(expirationTime.before(new Date())){
             return false;
         }
         return signedJWT.verify(new MACVerifier(secretKey));
     }
+
     public JwtInfo parseToken(String token) throws ParseException {
         SignedJWT signedJWT = SignedJWT.parse(token);
         String jwtId = signedJWT.getJWTClaimsSet().getJWTID();

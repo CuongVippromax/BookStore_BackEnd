@@ -1,8 +1,11 @@
 package com.cuong.bookstore.config;
 
 import com.cuong.bookstore.service.impl.UserDetailServiceImpl;
+import com.sendgrid.SendGrid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SecurityConfiguration {
     private final UserDetailServiceImpl userDetailService;
     private final JwtDecoderCustom jwtDecoder;
@@ -30,6 +33,8 @@ public class SecurityConfiguration {
             "/api/v1/user",
             "/api/v1/auth/login"
     };
+    @Value("${sendgrid.api-key}")
+    private static String apiKey;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -55,4 +60,9 @@ public class SecurityConfiguration {
         http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder)));
         return http.build();
     }
+    @Bean
+    public SendGrid sendGrid(){
+        return new SendGrid(apiKey);
+    }
+
 }

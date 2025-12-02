@@ -1,0 +1,116 @@
+.flash-sale-banner {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  padding: 20px 40px;
+  margin: 20px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.flash-sale-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.flash-sale-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lightning-icon {
+  font-size: 32px;
+  animation: flash 1s infinite;
+}
+
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.flash-sale-text {
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 2px;
+}
+
+.countdown-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.countdown-label {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-box {
+  background-color: #000;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 20px;
+  font-weight: bold;
+  min-width: 50px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+.time-separator {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.view-all-link {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.view-all-link:hover {
+  background-color: #f0f0f0;
+  transform: translateX(3px);
+}
+
+.arrow-icon {
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .flash-sale-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .flash-sale-text {
+    font-size: 24px;
+  }
+  
+  .countdown-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+
+

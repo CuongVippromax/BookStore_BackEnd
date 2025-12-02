@@ -41,6 +41,9 @@ public class AuthenticationService {
     }
     public void logout(String token) throws ParseException {
         JwtInfo jwtInfo = jwtService.parseToken(token);
+
+
+        //Lưu JWT ID chứ không phải lưu cả token vào redis
         String jwtId = jwtInfo.getJwtID();
         Date issueTime = jwtInfo.getIssueTime();
         Date expirateTime = jwtInfo.getExpiredTime();

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
@@ -43,7 +44,9 @@ public class User extends AbstractEntity<Long> implements UserDetails, Serializa
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        List<Role> listRoles = roles.stream().map(UserhasRole::getRole).toList();
+        List<String> roleName = listRoles.stream().map(Role::getName).toList();
+        return roleName.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override

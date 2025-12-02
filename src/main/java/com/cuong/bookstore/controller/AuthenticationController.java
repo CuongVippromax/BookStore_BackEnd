@@ -19,6 +19,7 @@ import java.text.ParseException;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 @Slf4j
+@Valid
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final AuthenticationService authenticationService;
