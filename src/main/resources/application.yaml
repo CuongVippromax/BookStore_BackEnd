@@ -1,25 +1,22 @@
-#spring.application.name=BookStore
 spring:
   application:
-    name: BookStore
+    name: ElectronicStore
   jpa:
     hibernate:
       ddl-auto: update
   kafka:
     bootstrap-servers: localhost:29092
   datasource:
-    url: jdbc:mysql://localhost:3306/bookstore
+    url: jdbc:mysql://localhost:3307/electronicstore_kc?createDatabaseIfNotExist=true
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-  data:
-    redis:
-      host: localhost
-      port: 6379
-jwt:
-  secret-key: 38fvze0661o1shjkkx8serxxhrkfgikhw2zdlsidsd48tm5amvqb0dbo6swivjrl
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/electronicstore}
 
-
-sendgrid:
-  api-key: ${SENDGRID_API_KEY:}
-  from-email: cuongdayne1811@gmail.com
+keycloak:
+  realm: electronicstore
+  client-id: electronicstore-app
